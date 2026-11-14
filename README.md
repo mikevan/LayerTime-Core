@@ -1,5 +1,9 @@
 # LayerTime-Core
 
+People relying on small field devices need consistent evidence handling across the toolkit. LayerTime-Core exists so those devices share tested behavior rather than drifting into incompatible copies.
+
+We separate application logic and evidence models from hardware drivers, letting products reuse the same implementation while retaining their own interfaces and builds. This foundation supports consistent observation and evidence handling; it does not itself identify intent or issue a qualified warning.
+
 Shared C++17 library for Hunter, LayerTime Ultra and LayerTime S3 Plus. The
 application model, application logic, platform ports and LayerTime Link wire
 codec live here. Core does not depend on Arduino, ESP-IDF, a display, an SD
