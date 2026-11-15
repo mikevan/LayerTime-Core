@@ -39,6 +39,7 @@ bool toSensorDetector(ReconTarget target, lts::DetectorId &out)
     case ReconTarget::SamsungTag: out = lts::DetectorId::SamsungTag; return true;
     case ReconTarget::GoogleTag: out = lts::DetectorId::GoogleTag; return true;
     case ReconTarget::Eapol: out = lts::DetectorId::Eapol; return true;
+    case ReconTarget::RemoteId: out = lts::DetectorId::RemoteId; return true;
     default: return false;
     }
 }
@@ -59,6 +60,7 @@ ReconTarget fromSensorDetector(lts::DetectorId detector)
     case lts::DetectorId::SamsungTag: return ReconTarget::SamsungTag;
     case lts::DetectorId::GoogleTag: return ReconTarget::GoogleTag;
     case lts::DetectorId::Eapol: return ReconTarget::Eapol;
+    case lts::DetectorId::RemoteId: return ReconTarget::RemoteId;
     }
     return ReconTarget::None;
 }

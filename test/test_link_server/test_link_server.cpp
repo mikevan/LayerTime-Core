@@ -702,9 +702,22 @@ void a_full_reply_through_the_pipe_matches_the_server()
     CHECK_INT(40, e.count);
 }
 
+void source_time_text_preserves_first_sighting_and_wrap() {
+    Rig r; r.monitor.deliver(ReconTarget::Deauth,"AA:BB:CC:DD:EE:FF",0xfffffff0u);
+    r.monitor.deliver(ReconTarget::Deauth,"AA:BB:CC:DD:EE:FF",0x20u);
+    r.send({5,9,1,0,0,0,2},0x30u);
+    std::string text;
+    for(const auto& raw:r.frames.raw) if(raw[0]==0x86) {
+        Text t;CHECK_TRUE(decodeText(raw.data(),raw.size(),t));CHECK_INT(2,t.field);
+        text.append(reinterpret_cast<const char*>(t.bytes),t.length);
+    }
+    CHECK_STR("uptime-ms:4294967280:32",text.c_str());
+}
+
 int main(int argc, char **argv)
 {
     CHECK_MAIN(argc, argv);
+    CASE(source_time_text_preserves_first_sighting_and_wrap);
     CASE(tracker_starts_at_one_and_stays_while_nothing_changes);
     CASE(tracker_bumps_once_per_pass_and_stamps_new_and_changed_events);
     CASE(tracker_records_dropped_events_for_the_gap);

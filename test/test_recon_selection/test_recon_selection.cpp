@@ -115,7 +115,7 @@ void names()
 // SetSensors (2026-11-04): one bit per single sensor at its ReconTarget value.
 void sensor_bits_cover_every_single_sensor_and_no_selection()
 {
-    CHECK_INT(0x0005FFE0u, kAllSensorsMask); // bits 5 to 16, and 18
+    CHECK_INT(0x000DFFE0u, kAllSensorsMask); // bits 5 to 16, and 18
     for (ReconTarget d : kSingles) CHECK_INT(1u << static_cast<uint8_t>(d), sensorBit(d));
     CHECK_INT(1u << 18, sensorBit(ReconTarget::Eapol));
     for (ReconTarget s : {ReconTarget::None, ReconTarget::All, ReconTarget::Trackers, ReconTarget::CounterSurveil,
@@ -146,7 +146,8 @@ void valid_masks_hold_only_sensor_bits()
     CHECK_FALSE(validSensorMask(1u << 1));  // All
     CHECK_FALSE(validSensorMask(1u << 2));  // a group
     CHECK_FALSE(validSensorMask(1u << 17)); // EarlyWarning
-    CHECK_FALSE(validSensorMask(1u << 19));
+    CHECK_TRUE(validSensorMask(1u << 19));
+    CHECK_FALSE(validSensorMask(1u << 20));
 }
 
 int main(int argc, char **argv)

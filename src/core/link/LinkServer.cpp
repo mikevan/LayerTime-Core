@@ -17,6 +17,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "LinkServer.h"
+#include <stdio.h>
 
 #include <string.h>
 
@@ -197,7 +198,8 @@ void LinkServer::handleCommand(const uint8_t *request, size_t len, FrameSink sin
         // longer a single range.
         if (c.argument < static_cast<uint8_t>(ReconTarget::All) ||
             (c.argument > static_cast<uint8_t>(ReconTarget::GoogleTag) &&
-             c.argument != static_cast<uint8_t>(ReconTarget::Eapol))) {
+             c.argument != static_cast<uint8_t>(ReconTarget::Eapol) &&
+             c.argument != static_cast<uint8_t>(ReconTarget::RemoteId))) {
             result = CommandResult::InvalidArgument;
             break;
         }
@@ -327,6 +329,10 @@ void LinkServer::handleGetText(const uint8_t *request, size_t len, FrameSink sin
         } else if (g.field == static_cast<uint8_t>(TextField::Detail)) {
             length = strnlen(e.detail, sizeof(e.detail));
             memcpy(text, e.detail, length);
+        } else if (g.field == static_cast<uint8_t>(TextField::ObservationTime)) {
+            const int n=snprintf(text,sizeof(text),"uptime-ms:%lu:%lu",
+                static_cast<unsigned long>(e.firstSeen.uptimeMs),static_cast<unsigned long>(e.lastSeen.uptimeMs));
+            if(n>0 && static_cast<size_t>(n)<sizeof(text))length=static_cast<size_t>(n);
         }
         break;
     }

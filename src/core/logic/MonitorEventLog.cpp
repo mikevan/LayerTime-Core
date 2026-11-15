@@ -71,6 +71,7 @@ void MonitorEventLog::add(const Candidate &c)
     entry.rssi = c.rssi;
     entry.channel = c.channel;
     entry.confidence = c.confidence;
+    entry.firstSeen.uptimeMs = c.atMs;
     entry.lastSeen.uptimeMs = c.atMs;
     entry.eventId = ++_serial;
     if (alert::raisesOnNewRecord(c.confidence, _sleepMode)) {

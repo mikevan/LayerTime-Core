@@ -103,6 +103,8 @@ constexpr uint16_t kCapSensorSet = 0x0080;
 // Bit 8: the Node takes COMMAND SetEvidenceHold (2026-11-04). Set only by a
 // Node that keeps evidence frames (it also sets bit 5, raw capture).
 constexpr uint16_t kCapEvidenceHold = 0x0100;
+constexpr uint16_t kCapRemoteId = 0x0800;
+constexpr uint16_t kCapObservationTime = 0x1000;
 
 // Request and reply sizes on the wire.
 constexpr size_t kHelloSize = 4;
@@ -123,6 +125,7 @@ constexpr size_t kTextMaxChunk = kMaxFrame - kTextHeaderSize; // 14
 enum class TextField : uint8_t {
     SourceId = 0,
     Detail = 1,
+    ObservationTime = 2,
 };
 
 // EVENT_SUMMARY.flags bits.

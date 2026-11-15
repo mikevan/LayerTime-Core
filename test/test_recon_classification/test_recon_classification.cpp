@@ -38,7 +38,7 @@ using namespace layertime::recon;
 
 namespace {
 
-bool isSingleDetector(int v) { return (v >= 5 && v <= 16) || v == 18; }  // 18 = Eapol
+bool isSingleDetector(int v) { return (v >= 5 && v <= 16) || v == 18 || v == 19; }  // 18 = Eapol
 
 } // namespace
 
@@ -53,7 +53,7 @@ void every_single_detector_maps_both_ways()
         ++mapped;
         CHECK_INT(v, static_cast<int>(fromSensorDetector(d)));
     }
-    CHECK_INT(13, mapped);
+    CHECK_INT(14, mapped);
     for (lts::DetectorId d : lts::kAllDetectors) {
         lts::DetectorId back = lts::DetectorId::Deauth;
         CHECK_TRUE(toSensorDetector(fromSensorDetector(d), back));
@@ -103,14 +103,15 @@ void ble_scan_sets_for_the_menu_entries()
         return out;
     };
     CHECK_TRUE(members(ReconTarget::None).empty());
-    CHECK_INT(13, members(ReconTarget::All).size());
+    CHECK_INT(14, members(ReconTarget::All).size());
     CHECK_TRUE((members(ReconTarget::EarlyWarning) == std::vector<int>{11, 12}));       // Flipper, Meta
     CHECK_TRUE((members(ReconTarget::Trackers) == std::vector<int>{10, 14, 15, 16}));   // AirTag, Tile, SmartTag, Google
-    CHECK_TRUE((members(ReconTarget::CounterSurveil) == std::vector<int>{8, 12, 13}));  // Flock, Meta, Axon
+    CHECK_TRUE((members(ReconTarget::CounterSurveil) == std::vector<int>{8, 12, 13, 18}));  // Flock, Meta, Axon
     CHECK_TRUE((members(ReconTarget::CounterIntrusion) == std::vector<int>{5, 6, 7, 9, 11, 17}));  // + Eapol (DetectorId 17)
     for (int v = 5; v <= 16; ++v) CHECK_TRUE((members(static_cast<ReconTarget>(v)) == std::vector<int>{v}));
     CHECK_TRUE((members(ReconTarget::Eapol) == std::vector<int>{17}));  // ReconTarget 18 -> DetectorId 17
-    for (int v : {19, 20, 100, 255}) CHECK_TRUE(members(static_cast<ReconTarget>(v)).empty());
+    CHECK_TRUE((members(ReconTarget::RemoteId) == std::vector<int>{18}));
+    for (int v : {20, 100, 255}) CHECK_TRUE(members(static_cast<ReconTarget>(v)).empty());
 }
 
 struct Mode {

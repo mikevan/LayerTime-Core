@@ -26,7 +26,7 @@ constexpr ReconTarget kTrackerMembers[] = {
     ReconTarget::AirTag, ReconTarget::Tile, ReconTarget::SamsungTag,
     ReconTarget::GoogleTag};
 constexpr ReconTarget kCounterSurveilMembers[] = {
-    ReconTarget::Flock, ReconTarget::Axon, ReconTarget::Meta};
+    ReconTarget::Flock, ReconTarget::Axon, ReconTarget::Meta, ReconTarget::RemoteId};
 constexpr ReconTarget kCounterIntrusionMembers[] = {
     ReconTarget::Deauth, ReconTarget::Pwnagotchi, ReconTarget::MultiSSID,
     ReconTarget::Pineapple, ReconTarget::Flipper, ReconTarget::Eapol};
@@ -64,7 +64,7 @@ bool isBleDetector(ReconTarget d)
     return d == ReconTarget::Flock || d == ReconTarget::AirTag ||
            d == ReconTarget::Flipper || d == ReconTarget::Meta ||
            d == ReconTarget::Tile || d == ReconTarget::SamsungTag ||
-           d == ReconTarget::GoogleTag;
+           d == ReconTarget::GoogleTag || d == ReconTarget::RemoteId;
 }
 
 bool isWifiDetector(ReconTarget d)
@@ -167,6 +167,7 @@ const char *detectorName(ReconTarget detector)
     case ReconTarget::SamsungTag: return "SMARTTAG";
     case ReconTarget::GoogleTag: return "GOOGLE TAG";
     case ReconTarget::Eapol: return "EAPOL";
+    case ReconTarget::RemoteId: return "REMOTE ID";
     case ReconTarget::EarlyWarning: return "EARLY WARNING";
     default: return "STOPPED";
     }

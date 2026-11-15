@@ -83,10 +83,10 @@ void missing_detail_reads_activity_detected()
 void long_text_is_truncated_to_the_field()
 {
     MonitorEventLog log;
-    const std::string longDetail(80, 'x');
+    const std::string longDetail(180, 'x');
     const char *longAddr = "0123456789ABCDEFGHIJKLMNOP";
     log.add(cand(ReconTarget::Axon, longAddr, Confidence::High, -60, 1, 1, longDetail.c_str()));
-    CHECK_INT(39, std::strlen(log.event(0).detail));
+    CHECK_INT(MonitorEvent::kDetailSize-1, std::strlen(log.event(0).detail));
     CHECK_STR("0123456789ABCDEFGH", log.event(0).sourceId);
 }
 
@@ -111,6 +111,7 @@ void a_repeat_updates_in_place()
     const MonitorEvent &e = log.event(0);
     CHECK_INT(-40, e.rssi);
     CHECK_INT(9, e.channel);
+    CHECK_INT(100, e.firstSeen.uptimeMs);
     CHECK_INT(900, e.lastSeen.uptimeMs);
     CHECK_INT(2, e.count);
     CHECK_STR("first", e.detail);  // detail is not refreshed

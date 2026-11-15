@@ -66,6 +66,7 @@ enum class ReconTarget : uint8_t {
     // attack indicator. 18, not 17, because EarlyWarning already holds 17
     // here; it maps to the sensor library's DetectorId::Eapol (17).
     Eapol = 18,
+    RemoteId = 19, // OpenDroneID Basic ID; not authenticated aircraft presence
 };
 
 // The sensors an operator can switch on and off (Set Sensors, 2026-11-04):
@@ -74,7 +75,7 @@ enum class ReconTarget : uint8_t {
 // EarlyWarning) have no bit. A Node starts with every sensor on, so a
 // client that never sends Set Sensors sees no change in behavior.
 constexpr uint32_t kAllSensorsMask =
-    (((1u << 17) - 1u) & ~((1u << 5) - 1u)) | (1u << 18); // bits 5 to 16, and 18
+    (((1u << 17) - 1u) & ~((1u << 5) - 1u)) | (1u << 18) | (1u << 19); // bits 5 to 16, and 18
 
 // Evidence hold (Set Evidence Hold, 2026-11-04): how long, in whole seconds,
 // a Node that keeps evidence frames stays on the channel after a deauth
@@ -115,7 +116,7 @@ static_assert(static_cast<uint8_t>(Band::Band5GHz) == 2, "Band::Band5GHz is 2 on
 // canonical name table in contracts/vectors/enums.json, so a client can show
 // an event without knowing anything about the detector that produced it.
 struct MonitorEvent {
-    static constexpr uint8_t kDetailSize = 40;
+    static constexpr uint8_t kDetailSize = 96;
     static constexpr uint8_t kSourceIdSize = 19;
 
     // Assigned by the producer when the record is created. Increases by one
@@ -140,6 +141,7 @@ struct MonitorEvent {
     // Sightings of this emitter by this detector, including the first.
     uint32_t count = 1;
 
+    Timestamp firstSeen; // Source uptime of the first recorded sighting, retained across updates
     Timestamp lastSeen;
 };
 
